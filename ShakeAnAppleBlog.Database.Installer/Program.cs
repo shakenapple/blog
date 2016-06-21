@@ -10,6 +10,7 @@ namespace ShakeAnAppleBlog.Database
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
