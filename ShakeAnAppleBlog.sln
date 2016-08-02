@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShakeAnAppleBlog.BusinessLogic", "ShakeAnAppleBlog.BusinessLogic\ShakeAnAppleBlog.BusinessLogic.csproj", "{8D67BCF4-815A-4168-93A7-6A275EA05ACF}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShakeAnAppleBlog.Database.Installer", "ShakeAnAppleBlog.Database.Installer\ShakeAnAppleBlog.Database.Installer.csproj", "{0E57E9A7-89B4-40A0-8297-40487E83E3B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShakeAnAppleBlog.Database", "ShakeAnAppleBlog.Database\ShakeAnAppleBlog.Database.csproj", "{FD3662A1-49F6-46FB-92C2-AD43F676CA01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShakeAnAppleBlog.DataAccess", "ShakeAnAppleBlog.DataAccess\ShakeAnAppleBlog.DataAccess.csproj", "{CD391DE4-E075-43F5-B2B5-3335C1510A5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{FD3662A1-49F6-46FB-92C2-AD43F676CA01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD3662A1-49F6-46FB-92C2-AD43F676CA01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD3662A1-49F6-46FB-92C2-AD43F676CA01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD391DE4-E075-43F5-B2B5-3335C1510A5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD391DE4-E075-43F5-B2B5-3335C1510A5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD391DE4-E075-43F5-B2B5-3335C1510A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD391DE4-E075-43F5-B2B5-3335C1510A5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
