@@ -4,11 +4,15 @@ Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
 */
 
 var gulp = require('gulp');
-var ts = require('gulp-typescript');
 
-gulp.task('default', function () {
-    // place code for your default task here
-});
+var browserSync = require('browser-sync').create();
+gulp.task('browserSync', function () {
+    browserSync.init({
+        server: {
+            baseDir: 'app'
+        },
+    })
+})
 
 gulp.task('restore', function() {
     gulp.src([
@@ -24,6 +28,31 @@ gulp.task('restore', function() {
     ]).pipe(gulp.dest('./wwwroot/libs'));
 });
 
-gulp.task('', function () {
-    gulp.
-})
+var less = require('gulp-less');
+var stylesSrc = './wwwroot/app/less/*.less';
+gulp.task('less', function () {
+    return gulp.src(stylesSrc)
+    .pipe(less())
+    .pipe(gulp.dest('./wwwroot/app/css'))
+    .pipe(browserSync.reload({
+        stream: true
+    }))
+});
+
+var ts = require('gulp-typescript');
+var scriptsSrc = './wwwroot/app/ts/*.ts';
+gulp.task('ts', function () {
+    return gulp.src(scriptsSrc)
+    .pipe(ts())
+    .pipe(gulp.dest('./wwwroot/app/js'))
+    .pipe(browserSync.reload({
+        stream: true
+    }))
+});
+
+gulp.task('watch', ['browserSync', 'less', 'ts'], function () {
+    gulp.watch(stylesSrc, ['less']);
+    gulp.watch(scriptsSrc, ['ts']);
+});
+
+
