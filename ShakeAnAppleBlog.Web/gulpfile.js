@@ -4,18 +4,28 @@ Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
 */
 
 var gulp = require('gulp');
-
+var less = require('gulp-less');
+var ts = require('gulp-typescript');
+var uglify = require("gulp-uglify");
+var cssMinify = require('gulp-minify-css');
 var browserSync = require('browser-sync').create();
-gulp.task('browserSync', function () {
-    browserSync.init({
-        server: {
-            baseDir: 'app'
-        },
-    })
-})
 
-gulp.task('restore', function() {
-    gulp.src([
+var paths = {
+    root: "./wwwroot"
+};
+paths.app = paths.root + "/app";
+paths.src = {
+    ts: paths.app + "/**/*/*.ts",
+    less: paths.app + "/**/*/*.less"
+};
+path.dest = {
+    js: paths.app + "/dest/js",
+    jsMin: paths.app + "/dest/js/min",
+    css: paths.app + "/dest/css",
+    cssMin: paths.app + "/dest/css/min",
+    libs: paths.root + "/libs"
+}
+paths.libs = [
         'node_modules/@angular/**/*.js',
         'node_modules/angular2-in-memory-web-api/*.js',
         'node_modules/rxjs/**/*.js',
@@ -25,34 +35,58 @@ gulp.task('restore', function() {
         'node_modules/reflect-metadata/reflect.js',
         'node_modules/jquery/dist/*.js',
         'node_modules/bootstrap/dist/**/*.*'
-    ]).pipe(gulp.dest('./wwwroot/libs'));
+];
+
+
+gulp.task('browserSync', function () {
+    browserSync.init({
+        server: {
+            baseDir: paths.root
+        },
+    })
+})
+
+gulp.task('restore', function() {
+    return gulp.src(paths.libs)
+    .pipe(gulp.dest(path.dest.libs));
 });
 
-var less = require('gulp-less');
-var stylesSrc = './wwwroot/app/less/*.less';
 gulp.task('less', function () {
-    return gulp.src(stylesSrc)
+    return gulp.src(paths.src.less)
     .pipe(less())
-    .pipe(gulp.dest('./wwwroot/app/css'))
+    .pipe(gulp.dest(paths.dest.css))
     .pipe(browserSync.reload({
         stream: true
     }))
 });
 
-var ts = require('gulp-typescript');
-var scriptsSrc = './wwwroot/app/ts/*.ts';
 gulp.task('ts', function () {
-    return gulp.src(scriptsSrc)
+    return gulp.src(paths.src.ts)
     .pipe(ts())
-    .pipe(gulp.dest('./wwwroot/app/js'))
+    .js
+    .pipe(gulp.dest(paths.dest.js))
     .pipe(browserSync.reload({
         stream: true
     }))
+});
+
+gulp.task("js-min", function () {
+    return gulp.src(paths.dest.js)
+        .pipe(uglify())
+        .pipe(concat('script.min.js'))
+        .pipe(gulp.dest(paths.dest.jsMin));
+});
+
+gulp.task("css-min", function () {
+    return gulp.src(paths.dest.css)
+        .pipe(cssMinify())
+        .pipe(concat('style.min.css'))
+        .pipe(gulp.dest(paths.dest.cssMin))
 });
 
 gulp.task('watch', ['browserSync', 'less', 'ts'], function () {
-    gulp.watch(stylesSrc, ['less']);
-    gulp.watch(scriptsSrc, ['ts']);
+    gulp.watch(paths.src.less, ['less']);
+    gulp.watch(paths.src.ts, ['ts']);
 });
 
 
