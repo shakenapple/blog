@@ -7,11 +7,24 @@ var gulp = require('gulp');
 var less = require('gulp-less');
 var ts = require('gulp-typescript');
 var uglify = require("gulp-uglify");
-var cssMinify = require('gulp-minify-css');
+var cssMinify = require('gulp-minify-css-names');
+var del = require('del');
+var tsConfig = require('./wwroot/app/tsconfig.json');
 var browserSync = require('browser-sync').create();
 
 var paths = {
-    root: "./wwwroot"
+    root: "./wwwroot",
+    libs: [
+        'node_modules/@angular/**/*.js',
+        'node_modules/angular2-in-memory-web-api/*.js',
+        'node_modules/rxjs/**/*.js',
+        'node_modules/systemjs/dist/*.js',
+        'node_modules/zone.js/dist/*.js',
+        'node_modules/core-js/client/*.js',
+        'node_modules/reflect-metadata/reflect.js',
+        'node_modules/jquery/dist/*.js',
+        'node_modules/bootstrap/dist/**/*.*'
+    ]
 };
 paths.app = paths.root + "/app";
 paths.src = {
@@ -25,17 +38,6 @@ path.dest = {
     cssMin: paths.app + "/dest/css/min",
     libs: paths.root + "/libs"
 }
-paths.libs = [
-        'node_modules/@angular/**/*.js',
-        'node_modules/angular2-in-memory-web-api/*.js',
-        'node_modules/rxjs/**/*.js',
-        'node_modules/systemjs/dist/*.js',
-        'node_modules/zone.js/dist/*.js',
-        'node_modules/core-js/client/*.js',
-        'node_modules/reflect-metadata/reflect.js',
-        'node_modules/jquery/dist/*.js',
-        'node_modules/bootstrap/dist/**/*.*'
-];
 
 
 gulp.task('browserSync', function () {
@@ -46,12 +48,24 @@ gulp.task('browserSync', function () {
     })
 })
 
-gulp.task('restore', function() {
+gulp.task('restore', function () {
     return gulp.src(paths.libs)
     .pipe(gulp.dest(path.dest.libs));
 });
 
-gulp.task('less', function () {
+gulp.task('clean-js', function () {
+    del(paths.dest.js);
+    del(paths.dest.jsMin);
+    return;
+});
+
+gulp.task('clean-css', function () {
+    del(paths.dest.css);
+    del(paths.dest.cssMin);
+    return;
+});
+
+gulp.task('compile-less', ['clean-css'], function () {
     return gulp.src(paths.src.less)
     .pipe(less())
     .pipe(gulp.dest(paths.dest.css))
@@ -60,9 +74,9 @@ gulp.task('less', function () {
     }))
 });
 
-gulp.task('ts', function () {
+gulp.task('compile-ts', ['clean-js'], function () {
     return gulp.src(paths.src.ts)
-    .pipe(ts())
+    .pipe(ts(tsConfig.compilerOptions))
     .js
     .pipe(gulp.dest(paths.dest.js))
     .pipe(browserSync.reload({
@@ -70,23 +84,29 @@ gulp.task('ts', function () {
     }))
 });
 
-gulp.task("js-min", function () {
+gulp.task("min-js", ["compile-js"], function () {
     return gulp.src(paths.dest.js)
         .pipe(uglify())
         .pipe(concat('script.min.js'))
         .pipe(gulp.dest(paths.dest.jsMin));
 });
 
-gulp.task("css-min", function () {
+gulp.task("min-css", ["compile-less"], function () {
     return gulp.src(paths.dest.css)
         .pipe(cssMinify())
         .pipe(concat('style.min.css'))
         .pipe(gulp.dest(paths.dest.cssMin))
 });
 
-gulp.task('watch', ['browserSync', 'less', 'ts'], function () {
-    gulp.watch(paths.src.less, ['less']);
-    gulp.watch(paths.src.ts, ['ts']);
+gulp.task('compile', ['compile-js', 'compile-css']);
+
+gulp.task('min', ['min-js, min-css']);
+
+gulp.task('clean', ['clean-js', 'clean-css']);
+
+gulp.task('watch', ['browserSync', 'compile-less', 'compile-ts'], function () {
+    gulp.watch(paths.src.less, ['compile-less']);
+    gulp.watch(paths.src.ts, ['compile-ts']);
 });
 
 
