@@ -1,4 +1,5 @@
-﻿/*
+﻿/// <binding AfterBuild='compile' Clean='clean' ProjectOpened='watch' />
+/*
 This file in the main entry point for defining Gulp tasks and using Gulp plugins.
 Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
 */
@@ -8,8 +9,9 @@ var less = require('gulp-less');
 var ts = require('gulp-typescript');
 var uglify = require("gulp-uglify");
 var cssMinify = require('gulp-minify-css-names');
+var concat = require('gulp-concat');
 var del = require('del');
-var tsConfig = require('./wwroot/app/tsconfig.json');
+var tsConfig = require('./wwwroot/app/tsconfig.json');
 var browserSync = require('browser-sync').create();
 
 var paths = {
@@ -31,7 +33,7 @@ paths.src = {
     ts: paths.app + "/**/*/*.ts",
     less: paths.app + "/**/*/*.less"
 };
-path.dest = {
+paths.dest = {
     js: paths.app + "/dest/js",
     jsMin: paths.app + "/dest/js/min",
     css: paths.app + "/dest/css",
